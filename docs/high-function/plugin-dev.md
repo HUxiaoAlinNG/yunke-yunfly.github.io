@@ -35,11 +35,11 @@ ycli package yunfly-plugin-xxxxxx
 - 说明：
 
   - `Yunfly Plugin` 常用的插件开发模板，如：
-    - [`@yunke/yunfly-plugin-redis`](https://git.myscrm.cn/yued/yunfly-plugin-redis)
+    - [`@yunke/yunfly-plugin-redis`](https://xxx/yued/yunfly-plugin-redis)
       <br />
   - `Yunfly Controller Plugin` 有 `controller`, `rpc` 请求的插件模板，如：
-    - [`@yunke/yunfly-plugin-controller-example`](https://git.myscrm.cn/yued/yunfly-plugin-controller-example)
-    - [`@yunke/yunfly-plugin-schedule-example`](https://git.myscrm.cn/yued/yunfly-plugin-schedule-example)
+    - [`@yunke/yunfly-plugin-controller-example`](https://xxx/yued/yunfly-plugin-controller-example)
+    - [`@yunke/yunfly-plugin-schedule-example`](https://xxx/yued/yunfly-plugin-schedule-example)
 
 ## 目录结构
 
