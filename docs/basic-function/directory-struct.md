@@ -83,9 +83,6 @@ sidebar_position: 2
 
 ## 备注
 
-* 为保持代码规范一致性 `controller`，`service` 文件尽量以大写字母开头，分别以 `Controller`、`Service` 后缀结尾
+* 为保持代码规范一致性 `controller`、`service` 文件尽量以大写字母开头，分别以 `Controller`、`Service` 后缀结尾
 * 根据自身业务的复杂度来决定 `controller` 和 `service` 下是否再拆分文件夹
 
-<br/>
-<br/>
-<br/>

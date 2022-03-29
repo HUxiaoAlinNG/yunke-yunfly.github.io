@@ -4,6 +4,8 @@ sidebar_position: 5
 
 # 控制器(Controller)
 
+`yunfly` 底层采用 `routing-controllers` ，故通过装饰器的方式来进行 `koa-router` 的开发。更多详细用法见[参考文档](https://github.com/typestack/routing-controllers#readme)
+
 ## 使用案例
 
 * 一个常规的 `Controller` 写法
@@ -231,3 +233,58 @@ export class UserController {
 | @Middleware({ type: "before"\|"after" }) | @Middleware({ type: "before" }) <br />class SomeMiddleware | 注册全局中间件 |
 | @UseBefore() | @UseBefore(CompressionMiddleware)| 请求开始前调用  |
 | @UseAfter() | @UseAfter(CompressionMiddleware) | 请求结束后调用  |
+| @Interceptor() | @Interceptor() class SomeInterceptor | 注册全局拦截器  |
+| @UseInterceptor() | @UseInterceptor(BadWordsInterceptor) | 拦截 `Controller` / `Action`，替换某些值 |
+
+## 其他装饰器
+
+| 标识 | 示例 | 描述 |
+| ------ | ------ | ------ |
+| @Authorized(roles?: string\|string[]) | @Authorized("SUPER_ADMIN") get() | 授权检查 |
+| @CurrentUser(options?: { required?: boolean }) | get(@CurrentUser({ required: true }) user: User)| 注入当前授权的用户 |
+| @Header(headerName: string, headerValue: string) | headerValue: string) @Header("Cache-Control", "private") get() | 自定义相应头部信息 |
+| @ContentType(contentType: string) | @ContentType("text/csv") get() | 自定义响应头部 `HTTP Content-Type` 信息 |
+| @Location(url: string) | @Location("http://github.com") get() | 自定义响应头部 `HTTP Location` 信息 |
+| @Redirect(url: string) | @Redirect("http://github.com") get() | 自定义响应头部 `HTTP Redirect` 信息 |
+| @HttpCode(code: number) | @HttpCode(201) post() | 自定义响应 `HTTP code` |
+| @OnNull(codeOrError: number\|Error) | @OnNull(201) post() | 当真实响应的 `HTTP code`  为 `null` 时，设置 `HTTP code` |
+| @OnUndefined(codeOrError: number\|Error) | @OnUndefined(201) post() | 当真实响应的 `HTTP code`  为 `undefined` 时，设置 `HTTP code` |
+| @Render(template: string) | @Render("user-list.html") get() | 渲染给定的 `HTML` 模板，控制器返回的数据用作模板变量 |
+
+## 自定义装饰器
+
+可以通过包装现有装饰器或者采用 `routing-controllers` 提供的方法创建新的装饰器。
+
+* 示例1
+  
+```ts
+
+import { createParamDecorator } from 'routing-controllers';
+
+export function UserFromSession(options?: { required?: boolean }) {
+  return createParamDecorator({
+    required: options && options.required ? true : false,
+    value: action => {
+      const token = action.request.headers['authorization'];
+      return database.findUserByToken(token);
+    },
+  });
+}
+
+```
+
+* 示例2
+  
+```ts
+
+import { UseAfter } from 'routing-controllers';
+import { IResponseType } from '../types';
+import { handleResponseType } from './handle';
+
+export const ResponseType = function (type: IResponseType) {
+  // 进行包装
+  return UseAfter(handleResponseType(type, true));
+};
+
+
+```
